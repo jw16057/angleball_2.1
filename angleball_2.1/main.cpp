@@ -16,6 +16,8 @@ SDL_Surface *ball_surface;
 SDL_Surface *background;
 SDL_Surface *screen;
 
+SDL_Event event;
+
 double symmetric_round(double x)
 {
 	if(x > 0)
@@ -100,6 +102,8 @@ void clean_up()
 }
 int main(int argc, char *args[])
 {
+	bool quit = false;
+
 	if(init() == false)
 		return 1;
 	
@@ -112,8 +116,13 @@ int main(int argc, char *args[])
 	int preX;
 	int preY;
 
-	while(true)
+	while(quit == false)
 	{
+		while(SDL_PollEvent(&event))
+		{
+			if(event.type == SDL_QUIT)
+				quit = true;
+		}
 		preX = (int) symmetric_round(ball1->x);
 		preY = (int) symmetric_round(ball1->y);
 
