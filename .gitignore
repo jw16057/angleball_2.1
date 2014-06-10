@@ -51,6 +51,7 @@ dlldata.c
 *.tmp
 *.tmp_proj
 *.log
+*.tlog
 *.vspscc
 *.vssscc
 .builds
@@ -67,6 +68,7 @@ ipch/
 *.ncb
 *.opensdf
 *.sdf
+<<<<<<< HEAD
 *.cachefile
 
 # Visual Studio profiler
@@ -184,6 +186,3 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
-
-# Added Jon Worobey
-*.tlog
