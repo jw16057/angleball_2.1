@@ -21,10 +21,24 @@
     <ClCompile Include="ball.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="world.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ball.h">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="world.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="background.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="ball.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

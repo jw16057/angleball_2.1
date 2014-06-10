@@ -78,9 +78,15 @@
   <ItemGroup>
     <ClCompile Include="ball.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="world.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ball.h" />
+    <ClInclude Include="world.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="background.png" />
+    <Image Include="ball.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
