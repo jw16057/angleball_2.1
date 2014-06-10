@@ -184,3 +184,8 @@ UpgradeLog*.htm
 *.rdl.data
 *.bim.layout
 *.bim_*.settings
+*.exe
+*.sdf
+*.tlog
+*.lastbuildstate
+*.obj
