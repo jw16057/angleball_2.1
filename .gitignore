@@ -6,7 +6,6 @@
 *.user
 *.sln.docstates
 *.txt
-*.sdf
 
 # Build results
 [Dd]ebug/
@@ -185,6 +184,3 @@ UpgradeLog*.htm
 *.rdl.data
 *.bim.layout
 *.bim_*.settings
-
-# Microsoft Fakes
-FakesAssemblies/
