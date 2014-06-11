@@ -6,6 +6,7 @@ Date: 6/2/2014
 #include "SDL.h"
 #include "SDL_image.h"
 #include "SDL_ttf.h"
+#include "world.h"
 #include "ball.h"
 #include <cmath>
 #include <cstdlib>
@@ -123,26 +124,11 @@ int main(int argc, char *args[])
 			if(event.type == SDL_QUIT)
 				quit = true;
 		}
-		preX = (int) symmetric_round(ball1->x);
-		preY = (int) symmetric_round(ball1->y);
 
 		ball1->tick();
 
-		if(preX == symmetric_round(ball1->x) && preY == symmetric_round(ball1->y))
-			tick++;
-		else
-			tick = 0;
-		
-		if(tick >= 5)
-		{
-			delete ball1;
-			ball1 = new Ball(rand() % 50,-1 * (rand() % 10),0,0.01, 0.7, preX, preY);
-			tick = 0;
-			SDL_Delay(100);
-		}
-
 		apply_surface(0,0,background,screen);
-		apply_surface((int) floor(ball1->x), (int) ceil(ball1->y), ball_surface, screen);
+		apply_surface((int) floor(ball1->getX()), (int) ceil(ball1->getY()), ball_surface, screen);
 
 		if(SDL_Flip(screen) == -1)
 			return 1;

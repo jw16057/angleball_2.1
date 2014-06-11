@@ -15,6 +15,10 @@ public:
 	Ball();
 	Ball(double xVel_, double yVel_, double xAccel_, double yAccel_, double damping, double x_, double y_);
 	void tick();
+
+	double getX() {return x;}
+	double getY() {return y;}
+private:
 	double x;
 	double y;
 	int radius;
