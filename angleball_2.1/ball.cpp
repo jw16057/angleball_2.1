@@ -8,23 +8,29 @@ Ball::Ball()
 {
 	radius = DEFAULT_BALL_RADIUS;
 	damping = DEFAULT_DAMPING;
+	lastMovement = 0;
 
-	x = 0;
-	y = SCREEN_HEIGHT - (radius * 2);
+	p.x = 0;
+	p.y = SCREEN_HEIGHT - (radius * 2);
+
+	historyPos.push_back(Pos(p.x, p.y));
 
 	xVel = 0;
 	yVel = 0;
 
 	xAccel = 0;
-	yAccel = gravity;
+	yAccel = 0;
 }
 
 Ball::Ball(double xVel_, double yVel_, double xAccel_, double yAccel_, double damping_, double x_, double y_)
 {
 	radius = DEFAULT_BALL_RADIUS;
-	x = x_;
-	y = y_;
-	
+	lastMovement = 0;
+	p.x = x_;
+	p.y = y_;
+
+	historyPos.push_back(Pos(p.x, p.y));
+
 	xVel = xVel_;
 	yVel = yVel_;
 	xAccel = xAccel_;
@@ -34,35 +40,58 @@ Ball::Ball(double xVel_, double yVel_, double xAccel_, double yAccel_, double da
 
 void Ball::tick()
 {
-	x += xVel;
-	y += yVel;
+	p.x += xVel;
+	p.y += yVel;
 
 	xVel += xAccel;
 	yVel += yAccel;
 	
 
-	if(y > SCREEN_HEIGHT-radius*2)
+	if(p.y > SCREEN_HEIGHT-radius*2)
 	{
-		int displacement = y - (SCREEN_HEIGHT-radius*2);
-		y = (SCREEN_HEIGHT-radius*2) - displacement;
+		int displacement = p.y - (SCREEN_HEIGHT-radius*2);
+		p.y = (SCREEN_HEIGHT-radius*2) - displacement;
 		yVel = -yVel * damping;
 		xVel = xVel * damping;
 	}
-	if(x > SCREEN_WIDTH-radius*2)
+	if(p.x > SCREEN_WIDTH-radius*2)
 	{
-		int displacement = x - (SCREEN_WIDTH-radius*2);
-		x = (SCREEN_WIDTH-radius*2) - displacement;
+		int displacement = p.x - (SCREEN_WIDTH-radius*2);
+		p.x = (SCREEN_WIDTH-radius*2) - displacement;
 		yVel = yVel * damping;
 		xVel = -xVel * damping;
 		
 	}
-	if(x < 0)
+	if(p.x < 0)
 	{
-		x = -x;
+		p.x = -p.x;
 		yVel = yVel * damping;
 		xVel = -xVel * damping;
 	}
+
+	Pos current(p.x, p.y);
+
+	if(current == historyPos.back())
+		lastMovement++;
+	else
+		lastMovement = 0;
+
+	historyPos.push_back(current);
 }
 
+bool Ball::isStill()
+{
+	if(lastMovement > 5)
+		return true;
+	else
+		return false;
+}
+
+void Ball::bounce()
+{
+	//balls.push_back(Ball(rand()%20, rand()%-5, 0, 0.01, 0.7, DEFAULT_X_POSITION, DEFAULT_Y_POSITION));
+	xVel = rand()%20;
+	yVel = rand()%-5;
+}
 
 #endif

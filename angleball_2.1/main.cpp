@@ -111,10 +111,7 @@ int main(int argc, char *args[])
 	if(load_files() == false)
 		return 1;
 
-	Ball *ball1;
-	ball1 =  new Ball(20, -5, 0, 0.01, 0.7, DEFAULT_X_POSITION, DEFAULT_Y_POSITION);
-
-	World w(50, DOWN);
+	World w(100, DOWN);
 
 	while(quit == false)
 	{
@@ -136,7 +133,7 @@ int main(int argc, char *args[])
 		if(SDL_Flip(screen) == -1)
 			return 1;
 		
-		SDL_Delay(2);
+		SDL_Delay(20);
 	}
 
 	clean_up();

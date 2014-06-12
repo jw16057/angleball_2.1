@@ -9,14 +9,18 @@ World::World(int numberOfBalls_, Direction gravityDirection_, double gravityStre
 	srand(time(0));
 	for(int x = numberOfBalls_; x > 0; x--)
 	{
+		balls.push_back(Ball(0, 0, 0, 0.01, 0.7, DEFAULT_X_POSITION, DEFAULT_Y_POSITION));
+		balls.back().bounce();
+		//balls.push_back(Ball(rand()%20, rand()%-5, 0, 0.01, 0.7, DEFAULT_X_POSITION, DEFAULT_Y_POSITION));
 		
-		balls.push_back(Ball(rand()%20, rand()%-5, 0, 0.01, 0.7, DEFAULT_X_POSITION, DEFAULT_Y_POSITION));
 	}
 }
 void World::newFrame() // Call this to advance the world one tick
 {
 	for(int x = 0; x < balls.size(); x++)
 	{
+		if(balls[x].isStill())
+			balls[x].bounce();
 		balls[x].tick();
 	}
 }
