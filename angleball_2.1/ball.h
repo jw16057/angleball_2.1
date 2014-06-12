@@ -1,8 +1,8 @@
 #ifndef __ball_h
 #define __ball_h
 
-const int SCREEN_HEIGHT = 480;
-const int SCREEN_WIDTH = 640;
+const int SCREEN_HEIGHT = 500;
+const int SCREEN_WIDTH = 1000;
 const int SCREEN_BPP = 32;
 const int DEFAULT_BALL_RADIUS = 16;
 const int DEFAULT_Y_POSITION = SCREEN_HEIGHT - (DEFAULT_BALL_RADIUS * 2);

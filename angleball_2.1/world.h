@@ -9,18 +9,16 @@ class World{
 public:
 	World(int numberOfBalls_, Direction gravityDirection_, double gravityStrength_ = 0.01);
 	void newFrame(); // Call this to advance the world one tick
-	void addBall();
+	void addBall(Ball x);
 	void deleteBall(int MouseX_, int MouseY_);
 
 	Direction getGravityDirection() {return gravityDirection;}
 	double getGravityStrength() {return gravityStrength;}
 	int getNumberOfBalls() {return balls.size();}
+	Ball & getBall(int x);
 private:
-	long tick;
+	long frameNum;
 
-	int gravityX;
-	int gravityY;
-	bool gravityIsUniform;
 	Direction gravityDirection;
 	double gravityStrength;
 

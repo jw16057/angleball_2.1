@@ -113,9 +113,8 @@ int main(int argc, char *args[])
 
 	Ball *ball1;
 	ball1 =  new Ball(20, -5, 0, 0.01, 0.7, DEFAULT_X_POSITION, DEFAULT_Y_POSITION);
-	int tick = 0;
-	int preX;
-	int preY;
+
+	World w(50, DOWN);
 
 	while(quit == false)
 	{
@@ -125,17 +124,20 @@ int main(int argc, char *args[])
 				quit = true;
 		}
 
-		ball1->tick();
+		w.newFrame();
 
 		apply_surface(0,0,background,screen);
-		apply_surface((int) floor(ball1->getX()), (int) ceil(ball1->getY()), ball_surface, screen);
+
+		for(int x = 0; x < w.getNumberOfBalls(); x++)
+		{
+			apply_surface((int) floor(w.getBall(x).getX()), (int) ceil(w.getBall(x).getY()), ball_surface, screen);
+		}
 
 		if(SDL_Flip(screen) == -1)
 			return 1;
 		
 		SDL_Delay(2);
 	}
-	std::cout << tick << "\n";
 
 	clean_up();
 
