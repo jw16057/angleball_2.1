@@ -130,6 +130,7 @@ int main(int argc, char *args[])
 	if(load_files() == false)
 		return 1;
 
+	Uint32 backgroundColor = SDL_MapRGB(screen->format, 0,150,0);
 
 	while(quit == false)
 	{
@@ -143,7 +144,7 @@ int main(int argc, char *args[])
 
 		w.newFrame();
 
-		apply_surface(0,0,background,screen);
+		SDL_FillRect(screen, NULL, backgroundColor);
 
 		for(int x = 0; x < w.getNumberOfBalls(); x++)
 		{
