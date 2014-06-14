@@ -81,7 +81,7 @@ void Ball::tick()
 
 bool Ball::isStill()
 {
-	if(lastMovement > 5)
+	if(lastMovement > 10)
 		return true;
 	else
 		return false;
@@ -89,9 +89,12 @@ bool Ball::isStill()
 
 void Ball::bounce()
 {
-	//balls.push_back(Ball(rand()%20, rand()%-5, 0, 0.01, 0.7, DEFAULT_X_POSITION, DEFAULT_Y_POSITION));
-	xVel = rand()%20;
-	yVel = rand()%-5;
+	xVel = rand()%5;
+	yVel = rand()%5;
+	if(rand() < RAND_MAX/2)
+		xVel = -xVel;
+	//if(rand() < RAND_MAX/2)
+		yVel = -yVel;
 }
 
 #endif

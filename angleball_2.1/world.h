@@ -9,7 +9,7 @@ class World{
 public:
 	World(int numberOfBalls_, Direction gravityDirection_, double gravityStrength_ = 0.01);
 	void newFrame(); // Call this to advance the world one tick
-	void addBall(Ball x);
+	void addBall(Ball * x);
 	void deleteBall(int MouseX_, int MouseY_);
 
 	Direction getGravityDirection() {return gravityDirection;}

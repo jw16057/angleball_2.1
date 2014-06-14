@@ -19,6 +19,8 @@ SDL_Surface *screen;
 
 SDL_Event event;
 
+World w(1, DOWN);
+
 double symmetric_round(double x)
 {
 	if(x > 0)
@@ -96,6 +98,23 @@ void apply_surface(int x, int y, SDL_Surface *source, SDL_Surface *destination)
 
 	SDL_BlitSurface(source, NULL, destination, &offset);
 }
+void handle_mouse_events()
+{
+	if(event.type == SDL_MOUSEBUTTONDOWN)
+	{
+		if(event.button.button == SDL_BUTTON_LEFT)
+		{
+			Ball * ptr;
+			ptr = new Ball(0, 0, 0, 0.01, 0.7, event.button.x, event.button.y);
+			ptr->bounce();
+			w.addBall(ptr);
+		}
+		else if(event.button.button == SDL_BUTTON_RIGHT)
+		{
+			w.deleteBall(event.button.x, event.button.y);
+		}
+	}
+}
 void clean_up()
 {
 	SDL_FreeSurface(ball_surface);
@@ -111,12 +130,13 @@ int main(int argc, char *args[])
 	if(load_files() == false)
 		return 1;
 
-	World w(100, DOWN);
 
 	while(quit == false)
 	{
 		while(SDL_PollEvent(&event))
 		{
+			handle_mouse_events();
+
 			if(event.type == SDL_QUIT)
 				quit = true;
 		}
@@ -133,7 +153,7 @@ int main(int argc, char *args[])
 		if(SDL_Flip(screen) == -1)
 			return 1;
 		
-		SDL_Delay(20);
+		SDL_Delay(2);
 	}
 
 	clean_up();

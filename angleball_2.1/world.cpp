@@ -17,16 +17,17 @@ World::World(int numberOfBalls_, Direction gravityDirection_, double gravityStre
 }
 void World::newFrame() // Call this to advance the world one tick
 {
-	for(int x = 0; x < balls.size(); x++)
+	for(int x = balls.size()-1; x >= 0; x--)
 	{
 		if(balls[x].isStill())
-			balls[x].bounce();
-		balls[x].tick();
+			balls.erase(balls.begin()+x);
+		else
+			balls[x].tick();
 	}
 }
-void World::addBall(Ball x)
+void World::addBall(Ball * x)
 {
-
+	balls.push_back(*x);
 }
 void World::deleteBall(int MouseX, int MouseY)
 {
