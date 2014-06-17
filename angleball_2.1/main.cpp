@@ -21,6 +21,8 @@ SDL_Event event;
 
 World w(1, DOWN);
 
+bool quit;
+
 double symmetric_round(double x)
 {
 	if(x > 0)
@@ -69,8 +71,13 @@ bool init()
 {
 	if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
 		return false;
-	
-	screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE);
+
+	const SDL_VideoInfo* info = SDL_GetVideoInfo();
+	int screenWidth = info->current_w;
+	int screenHeight = info->current_h;
+
+	screen = SDL_SetVideoMode(screenWidth, screenHeight, SCREEN_BPP, SDL_FULLSCREEN);
+	//screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE);
 
 	if(screen == NULL)
 		return false;
@@ -98,7 +105,7 @@ void apply_surface(int x, int y, SDL_Surface *source, SDL_Surface *destination)
 
 	SDL_BlitSurface(source, NULL, destination, &offset);
 }
-void handle_mouse_events()
+void handle_events()
 {
 	if(event.type == SDL_MOUSEBUTTONDOWN)
 	{
@@ -114,6 +121,11 @@ void handle_mouse_events()
 			w.deleteBall(event.button.x, event.button.y);
 		}
 	}
+	if(event.type == SDL_KEYDOWN)
+	{
+		if(event.key.keysym.sym == SDLK_ESCAPE)
+			quit = true;
+	}
 }
 void clean_up()
 {
@@ -122,7 +134,7 @@ void clean_up()
 }
 int main(int argc, char *args[])
 {
-	bool quit = false;
+	quit = false;
 
 	if(init() == false)
 		return 1;
@@ -136,7 +148,7 @@ int main(int argc, char *args[])
 	{
 		while(SDL_PollEvent(&event))
 		{
-			handle_mouse_events();
+			handle_events();
 
 			if(event.type == SDL_QUIT)
 				quit = true;
