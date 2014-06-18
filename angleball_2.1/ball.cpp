@@ -1,33 +1,16 @@
 #ifndef __ball_cpp
 #define __ball_cpp
 #include "ball.h"
+#include "Jon_Constants.h"
 
 double symmetric_round(double);
 
-Ball::Ball()
-{
-	radius = DEFAULT_BALL_RADIUS;
-	damping = DEFAULT_DAMPING;
-	lastMovement = 0;
-
-	p.x = 0;
-	p.y = SCREEN_HEIGHT - (radius * 2);
-
-	historyPos.push_back(Pos(p.x, p.y));
-
-	xVel = 0;
-	yVel = 0;
-
-	xAccel = 0;
-	yAccel = 0;
-}
-
 Ball::Ball(double xVel_, double yVel_, double xAccel_, double yAccel_, double damping_, double x_, double y_)
 {
-	radius = DEFAULT_BALL_RADIUS;
+	radius = 16;
 	lastMovement = 0;
 	p.x = x_;
-	p.y = y_;
+	p.y = y_ - (radius * 2);
 
 	historyPos.push_back(Pos(p.x, p.y));
 
@@ -47,17 +30,17 @@ void Ball::tick()
 	yVel += yAccel;
 	
 
-	if(p.y > SCREEN_HEIGHT-radius*2)
+	if(p.y > Jon_Constants::SCREEN_HEIGHT-radius*2)
 	{
-		int displacement = p.y - (SCREEN_HEIGHT-radius*2);
-		p.y = (SCREEN_HEIGHT-radius*2) - displacement;
+		int displacement = (int) p.y - (Jon_Constants::SCREEN_HEIGHT-radius*2);
+		p.y = (Jon_Constants::SCREEN_HEIGHT-radius*2) - displacement;
 		yVel = -yVel * damping;
 		xVel = xVel * damping;
 	}
-	if(p.x > SCREEN_WIDTH-radius*2)
+	if(p.x > Jon_Constants::SCREEN_WIDTH-radius*2)
 	{
-		int displacement = p.x - (SCREEN_WIDTH-radius*2);
-		p.x = (SCREEN_WIDTH-radius*2) - displacement;
+		int displacement = (int) p.x - (Jon_Constants::SCREEN_WIDTH-radius*2);
+		p.x = (Jon_Constants::SCREEN_WIDTH-radius*2) - displacement;
 		yVel = yVel * damping;
 		xVel = -xVel * damping;
 		

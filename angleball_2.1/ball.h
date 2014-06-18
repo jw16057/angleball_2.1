@@ -1,15 +1,10 @@
 #ifndef __ball_h
 #define __ball_h
 
-#include <deque>
+#include "SDL.h"
+#include "SDL_image.h"
 
-const int SCREEN_HEIGHT = 480;
-const int SCREEN_WIDTH = 640;
-const int SCREEN_BPP = 32;
-const int DEFAULT_BALL_RADIUS = 16;
-const int DEFAULT_Y_POSITION = SCREEN_HEIGHT - (DEFAULT_BALL_RADIUS * 2);
-const int DEFAULT_X_POSITION = 0;
-const double DEFAULT_DAMPING = 0.4;
+#include <deque>
 
 struct Pos{
 	Pos(){x = 0; y = 0;}
@@ -24,13 +19,15 @@ struct Pos{
 			return false;
 	}
 };
+
 class Ball{
 public:
-	Ball();
 	Ball(double xVel_, double yVel_, double xAccel_, double yAccel_, double damping, double x_, double y_);
 	void tick();
 	bool isStill();
 	void bounce();
+	void changePos(Pos xy);
+	void changeVel(double x, double y);
 
 	double getX() {return p.x;}
 	double getY() {return p.y;}
@@ -40,9 +37,8 @@ private:
 	int radius;
 	double xVel;
 	double yVel;
-	double xAccel;
-	double yAccel;
 	double damping;
+	SDL_Surface *face;
 	std::deque<Pos> historyPos;
 };
 

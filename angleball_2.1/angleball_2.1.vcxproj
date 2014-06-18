@@ -82,6 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ball.h" />
+    <ClInclude Include="Jon_Constants.h" />
     <ClInclude Include="world.h" />
   </ItemGroup>
   <ItemGroup>

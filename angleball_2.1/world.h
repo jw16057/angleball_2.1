@@ -7,7 +7,7 @@ enum Direction {UP, DOWN, LEFT, RIGHT};
 
 class World{
 public:
-	World(int numberOfBalls_, Direction gravityDirection_, double gravityStrength_ = 0.01);
+	World(int numberOfBalls_, Direction gravityDirection_, int screenWidth_, int screenHeight, double gravityStrength_ = 0.01);
 	void newFrame(); // Call this to advance the world one tick
 	void addBall(Ball * x);
 	void deleteBall(int MouseX_, int MouseY_);
@@ -17,6 +17,8 @@ public:
 	int getNumberOfBalls() {return balls.size();}
 	Ball & getBall(int x);
 private:
+	int screenWidth;
+	int screenHeight;
 	long frameNum;
 
 	Direction gravityDirection;

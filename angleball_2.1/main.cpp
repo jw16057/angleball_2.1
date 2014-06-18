@@ -3,15 +3,18 @@ Author: Jonathan Worobey
 Date: 6/2/2014
 */
 
+//SDL includes
 #include "SDL.h"
 #include "SDL_image.h"
 #include "SDL_ttf.h"
-#include "world.h"
-#include "ball.h"
+//STD lib
 #include <cmath>
 #include <cstdlib>
 #include <iostream>//Development only
-using namespace std;
+//Angleball includes
+#include "world.h"
+#include "ball.h"
+#include "Jon_Constants.h"
 
 SDL_Surface *ball_surface;
 SDL_Surface *background;
@@ -19,7 +22,9 @@ SDL_Surface *screen;
 
 SDL_Event event;
 
-World w(1, DOWN);
+World *w;
+int screenWidth;
+int screenHeight;
 
 bool quit;
 
@@ -30,53 +35,70 @@ double symmetric_round(double x)
 	else
 		return ceil(x - 0.5);
 }
-SDL_Surface * load_image(char s[], int r, int g, int b)
+
+namespace Jon_SDL_functions
 {
-	SDL_Surface *loadedImage = NULL;
-	SDL_Surface *optimizedImage = NULL;
-
-	loadedImage = IMG_Load(s);
-
-	if(loadedImage != NULL)
+	SDL_Surface * load_image(char s[], int r, int g, int b)
 	{
-		optimizedImage = SDL_DisplayFormat(loadedImage);
+		SDL_Surface *loadedImage = NULL;
+		SDL_Surface *optimizedImage = NULL;
 
-		SDL_FreeSurface(loadedImage);
-		if(optimizedImage != NULL)
+		loadedImage = IMG_Load(s);
+
+		if(loadedImage != NULL)
 		{
-			Uint32 colorkey = SDL_MapRGB(optimizedImage->format, r,g,b);
-			SDL_SetColorKey(optimizedImage, SDL_SRCCOLORKEY, colorkey);
+			optimizedImage = SDL_DisplayFormat(loadedImage);
+
+			SDL_FreeSurface(loadedImage);
+			if(optimizedImage != NULL)
+			{
+				Uint32 colorkey = SDL_MapRGB(optimizedImage->format, r,g,b);
+				SDL_SetColorKey(optimizedImage, SDL_SRCCOLORKEY, colorkey);
+			}
 		}
-	}
 	
-	return optimizedImage;
-}
-SDL_Surface * load_image(char s[])
-{
-	SDL_Surface *loadedImage = NULL;
-	SDL_Surface *optimizedImage = NULL;
+		return optimizedImage;
+	}
 
-	loadedImage = IMG_Load(s);
-
-	if(loadedImage != NULL)
+	SDL_Surface * load_image(char s[])
 	{
-		optimizedImage = SDL_DisplayFormat(loadedImage);
+		SDL_Surface *loadedImage = NULL;
+		SDL_Surface *optimizedImage = NULL;
 
-		SDL_FreeSurface(loadedImage);	
-	}
+		loadedImage = IMG_Load(s);
+
+		if(loadedImage != NULL)
+		{
+			optimizedImage = SDL_DisplayFormat(loadedImage);
+
+			SDL_FreeSurface(loadedImage);	
+		}
 	
-	return optimizedImage;
+		return optimizedImage;
+	}
+
+	void apply_surface(int x, int y, SDL_Surface *source, SDL_Surface *destination)
+	{
+		SDL_Rect offset;
+
+		offset.x = x;
+		offset.y = y;
+
+		SDL_BlitSurface(source, NULL, destination, &offset);
+	}
+
 }
+
 bool init()
 {
 	if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
 		return false;
 
 	const SDL_VideoInfo* info = SDL_GetVideoInfo();
-	int screenWidth = info->current_w;
-	int screenHeight = info->current_h;
+	screenWidth = info->current_w;
+	screenHeight = info->current_h;
 
-	screen = SDL_SetVideoMode(screenWidth, screenHeight, SCREEN_BPP, SDL_FULLSCREEN);
+	screen = SDL_SetVideoMode(screenWidth, screenHeight, Jon_Constants::SCREEN_BPP, SDL_FULLSCREEN);
 	//screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE);
 
 	if(screen == NULL)
@@ -88,22 +110,13 @@ bool init()
 }
 bool load_files()
 {
-	ball_surface = load_image("ball.png", 0, 0, 0);
-	background = load_image("background.png");
+	ball_surface = Jon_SDL_functions::load_image("ball.png", 0, 0, 0);
+	background = Jon_SDL_functions::load_image("background.png");
 
 	if(ball_surface == NULL)
 		return false;
 
 	return true;
-}
-void apply_surface(int x, int y, SDL_Surface *source, SDL_Surface *destination)
-{
-	SDL_Rect offset;
-
-	offset.x = x;
-	offset.y = y;
-
-	SDL_BlitSurface(source, NULL, destination, &offset);
 }
 void handle_events()
 {
@@ -114,11 +127,11 @@ void handle_events()
 			Ball * ptr;
 			ptr = new Ball(0, 0, 0, 0.01, 0.7, event.button.x, event.button.y);
 			ptr->bounce();
-			w.addBall(ptr);
+			w->addBall(ptr);
 		}
 		else if(event.button.button == SDL_BUTTON_RIGHT)
 		{
-			w.deleteBall(event.button.x, event.button.y);
+			w->deleteBall(event.button.x, event.button.y);
 		}
 	}
 	if(event.type == SDL_KEYDOWN)
@@ -143,6 +156,7 @@ int main(int argc, char *args[])
 		return 1;
 
 	Uint32 backgroundColor = SDL_MapRGB(screen->format, 0,150,0);
+	w = new World(1, DOWN, 1920, 1080);
 
 	while(quit == false)
 	{
@@ -154,13 +168,13 @@ int main(int argc, char *args[])
 				quit = true;
 		}
 
-		w.newFrame();
+		w->newFrame();
 
 		SDL_FillRect(screen, NULL, backgroundColor);
 
-		for(int x = 0; x < w.getNumberOfBalls(); x++)
+		for(int x = 0; x < w->getNumberOfBalls(); x++)
 		{
-			apply_surface((int) floor(w.getBall(x).getX()), (int) ceil(w.getBall(x).getY()), ball_surface, screen);
+			Jon_SDL_functions::apply_surface((int) floor(w->getBall(x).getX()), (int) ceil(w->getBall(x).getY()), ball_surface, screen);
 		}
 
 		if(SDL_Flip(screen) == -1)
