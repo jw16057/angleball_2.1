@@ -26,6 +26,9 @@ World *w;
 int screenWidth;
 int screenHeight;
 
+int leftClickXPos;
+int leftClickYPos;
+
 bool quit;
 
 double symmetric_round(double x)
@@ -110,11 +113,7 @@ bool init()
 }
 bool load_files()
 {
-	ball_surface = Jon_SDL_functions::load_image("ball.png", 0, 0, 0);
 	background = Jon_SDL_functions::load_image("background.png");
-
-	if(ball_surface == NULL)
-		return false;
 
 	return true;
 }
@@ -124,14 +123,31 @@ void handle_events()
 	{
 		if(event.button.button == SDL_BUTTON_LEFT)
 		{
+			leftClickXPos = event.button.x;
+			leftClickYPos = event.button.y;
+			
 			Ball * ptr;
-			ptr = new Ball(0, 0, 0, 0.01, 0.7, event.button.x, event.button.y);
-			ptr->bounce();
-			w->addBall(ptr);
+			ptr = new Ball(0, 0, 0, 0, 0, event.button.x, event.button.y);
+			w->addTemp(ptr);
 		}
 		else if(event.button.button == SDL_BUTTON_RIGHT)
 		{
 			w->deleteBall(event.button.x, event.button.y);
+		}
+	}
+	if(event.type == SDL_MOUSEBUTTONUP)
+	{
+		if(event.button.button == SDL_BUTTON_LEFT)
+		{
+			int xVel = (leftClickXPos - event.button.x) / 50.0;
+			int yVel = (leftClickYPos - event.button.y) / 50.0;
+
+			if(w->deleteTemp())
+			{
+				Ball * ptr;
+				ptr = new Ball(xVel, yVel, 0, 0.01, 0.7, leftClickXPos, leftClickYPos);
+				w->addBall(ptr);
+			}
 		}
 	}
 	if(event.type == SDL_KEYDOWN)
@@ -148,6 +164,8 @@ void clean_up()
 int main(int argc, char *args[])
 {
 	quit = false;
+	leftClickXPos = 0;
+	leftClickYPos = 0;
 
 	if(init() == false)
 		return 1;
@@ -156,7 +174,7 @@ int main(int argc, char *args[])
 		return 1;
 
 	Uint32 backgroundColor = SDL_MapRGB(screen->format, 0,150,0);
-	w = new World(1, DOWN, 1920, 1080);
+	w = new World(1, DOWN, screenWidth, screenHeight);
 
 	while(quit == false)
 	{
@@ -172,10 +190,7 @@ int main(int argc, char *args[])
 
 		SDL_FillRect(screen, NULL, backgroundColor);
 
-		for(int x = 0; x < w->getNumberOfBalls(); x++)
-		{
-			Jon_SDL_functions::apply_surface((int) floor(w->getBall(x).getX()), (int) ceil(w->getBall(x).getY()), ball_surface, screen);
-		}
+		w->showSurfaces(screen);
 
 		if(SDL_Flip(screen) == -1)
 			return 1;

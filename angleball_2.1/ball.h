@@ -23,7 +23,7 @@ struct Pos{
 class Ball{
 public:
 	Ball(double xVel_, double yVel_, double xAccel_, double yAccel_, double damping, double x_, double y_);
-	void tick();
+	void tick(int screenWidth, int screenHeight);
 	bool isStill();
 	void bounce();
 	void changePos(Pos xy);
@@ -31,12 +31,15 @@ public:
 
 	double getX() {return p.x;}
 	double getY() {return p.y;}
+	SDL_Surface * getFace() {return face;};
 private:
 	Pos p;
 	int lastMovement;
 	int radius;
 	double xVel;
 	double yVel;
+	double xAccel;
+	double yAccel;
 	double damping;
 	SDL_Surface *face;
 	std::deque<Pos> historyPos;

@@ -2,6 +2,7 @@
 #define __ball_cpp
 #include "ball.h"
 #include "Jon_Constants.h"
+#include "Jon_SDL_functions.h"
 
 double symmetric_round(double);
 
@@ -19,9 +20,14 @@ Ball::Ball(double xVel_, double yVel_, double xAccel_, double yAccel_, double da
 	xAccel = xAccel_;
 	yAccel = yAccel_;
 	damping = damping_;
+
+	face = Jon_SDL_functions::load_image("ball.png", 0, 0, 0);
+
+	if(face == NULL)
+		exit(3);
 }
 
-void Ball::tick()
+void Ball::tick(int screenWidth, int screenHeight)
 {
 	p.x += xVel;
 	p.y += yVel;
@@ -30,17 +36,17 @@ void Ball::tick()
 	yVel += yAccel;
 	
 
-	if(p.y > Jon_Constants::SCREEN_HEIGHT-radius*2)
+	if(p.y > screenHeight-radius*2)
 	{
-		int displacement = (int) p.y - (Jon_Constants::SCREEN_HEIGHT-radius*2);
-		p.y = (Jon_Constants::SCREEN_HEIGHT-radius*2) - displacement;
+		int displacement = (int) p.y - (screenHeight-radius*2);
+		p.y = (screenHeight-radius*2) - displacement;
 		yVel = -yVel * damping;
 		xVel = xVel * damping;
 	}
-	if(p.x > Jon_Constants::SCREEN_WIDTH-radius*2)
+	if(p.x > screenWidth-radius*2)
 	{
-		int displacement = (int) p.x - (Jon_Constants::SCREEN_WIDTH-radius*2);
-		p.x = (Jon_Constants::SCREEN_WIDTH-radius*2) - displacement;
+		int displacement = (int) p.x - (screenWidth-radius*2);
+		p.x = (screenWidth-radius*2) - displacement;
 		yVel = yVel * damping;
 		xVel = -xVel * damping;
 		
@@ -64,6 +70,7 @@ void Ball::tick()
 
 bool Ball::isStill()
 {
+	return false; ////////////////////////////////////////NOTICE
 	if(lastMovement > 10)
 		return true;
 	else
