@@ -16,8 +16,6 @@ World::World(int numberOfBalls_, Direction gravityDirection_, int screenWidth_, 
 	{
 		balls.push_back(Ball(0, 0, 0, 0.01, 0.7, 0, screenHeight));
 		balls.back().bounce();
-		//balls.push_back(Ball(rand()%20, rand()%-5, 0, 0.01, 0.7, DEFAULT_X_POSITION, DEFAULT_Y_POSITION));
-		
 	}
 }
 void World::newFrame() // Call this to advance the world one tick
